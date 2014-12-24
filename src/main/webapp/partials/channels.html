@@ -1,0 +1,27 @@
+<div class="row">
+
+    <div class="col-md-3">
+        New channel <input type="text" ng-model="channelName"/>
+        <a ng-click="newChannel()">new</a>
+
+        <ul>
+            <li ng-repeat="channel in channels track by $index">{{channel.name}}</li>
+        </ul>
+
+    </div>
+
+    <div class="col-md-9">
+
+        <tabset>
+            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" ng-init="channel = tab.channel">
+
+
+                <div ng-include="'/partials/channel.html'" />
+
+
+            </tab>
+        </tabset>
+
+    </div>
+
+</div>

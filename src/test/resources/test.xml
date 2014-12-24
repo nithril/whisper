@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<search xmlns="http://vdoc.victorbuckservices.com/search/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        company="GLL" docType="CNT" maxResults="50">
+    <boolean>
+        <must>
+            <field type="xs:string" name="account">ILF0000002</field>
+            <field type="xs:string" name="transaction">ILF400047929</field>
+        </must>
+    </boolean>
+</search>

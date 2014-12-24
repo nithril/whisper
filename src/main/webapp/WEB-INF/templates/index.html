@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="phonecatApp" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <title>Google Phone Gallery</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"/>
+
+
+    <script th:src="@{/vendor/lodash/lodash.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-2.1.3.min.js}"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <script th:src="@{/vendor/cryptico/cryptico.js}"></script>
+
+    <script th:src="@{/vendor/forge/forge.bundle.js}"></script>
+
+    <script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+    <script th:src="@{/vendor/stomp/stomp.min.js}"></script>
+
+    <script>
+
+        var sock = new SockJS('http://localhost:8080/portfolio/');
+        var stompClient = Stomp.over(sock);
+
+        sock.onopen = function () {
+            console.log('open');
+        };
+        sock.onmessage = function (e) {
+            console.log('message', e.data);
+        };
+        sock.onclose = function () {
+            console.log('close');
+        };
+
+        //sock.send('test');
+        var error_callback = function(error) {
+            // display the error's message header:
+            alert(error.headers.message);
+        };
+
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/topic/foo', function (message) {
+                console.log("subscribe " + message.body);
+            });
+        }, error_callback);
+
+
+        //
+
+
+    </script>
+
+</head>
+
+<body ng-view="">
+
+
+
+<script th:src="@{/vendor/angular/angular.js}"></script>
+<script th:src="@{/vendor/angular/angular-route.js}"></script>
+<script th:src="@{/vendor/angular/ui-bootstrap-tpls-0.12.0.min.js}"></script>
+
+<script th:src="@{/app/controller.js}"></script>
+<script th:src="@{/app/LoginCtrl.js}"></script>
+<script th:src="@{/app/ChannelCtrl.js}"></script>
+
+
+</body>
+
+</html>
