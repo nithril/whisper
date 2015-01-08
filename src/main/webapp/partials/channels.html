@@ -1,24 +1,39 @@
-<div class="row">
+<div class="row" style="height:100%">
 
-    <div class="col-md-3">
-        New channel <input type="text" ng-model="channelName"/>
-        <a ng-click="newChannel()">new</a>
+    <div class="col-md-2">
 
-        <ul>
-            <li ng-repeat="channel in channels track by $index">{{channel.name}}</li>
-        </ul>
+        <form class="form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" id="name" placeholder="Channel Name" ng-model="channelName">
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="newChannel()">
+                <span class="glyphicon glyphicon-plus"/>
+            </button>
+
+        </form>
+
+        <table class="table table-bordered table-hover table-condensed">
+
+            <tr class="" ng-repeat="channel in channels track by $index">
+                <td>
+                    {{channel.name}}
+                </td>
+                <td style="width: 1%; text-wrap: none;">
+                    <button type="button" class="btn btn-success btn-xs" ng-click="joinChannel(channel.name)">
+                        <span class="glyphicon glyphicon-play-circle"/>
+                    </button>
+                </td>
+            </tr>
+        </table>
 
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-10" style="height:100%">
 
-        <tabset>
-            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" ng-init="channel = tab.channel">
-
-
-                <div ng-include="'/partials/channel.html'" />
-
-
+        <tabset style="height:100%">
+            <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" ng-init="channel = tab.channel"
+                 style="height:100%">
+                <div ng-include="'/partials/channel.html'" style="height:100%"/>
             </tab>
         </tabset>
 

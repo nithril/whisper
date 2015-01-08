@@ -8,21 +8,29 @@
                 <input type="text" class="form-control" id="name" placeholder="Name" ng-model="name">
             </div>
             <div class="form-group">
-                <label for="publicKey">Public Key <button type="button" class="btn btn-primary btn-xs" ng-click="generate()">
-                    <span class="glyphicon glyphicon-repeat"/>
-                </button></label>
-                <textarea type="text" class="form-control" id="publicKey" placeholder="Name" ng-model="publicKey"></textarea>
+                <label for="publicKey">Public Key
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="generate()">
+                        <span class="glyphicon glyphicon-repeat"/>
+                    </button>
+                </label>
+                <textarea type="text" class="form-control" id="publicKey" placeholder="Name"
+                          ng-model="publicKey"></textarea>
 
             </div>
 
             <div class="form-group">
                 <label for="privateKey">Private Key</label>
-                <textarea type="text" class="form-control" id="privateKey" placeholder="Name" ng-model="privateKey"></textarea>
+                <textarea type="text" class="form-control" id="privateKey" placeholder="Name"
+                          ng-model="privateKey"></textarea>
             </div>
 
+            <div class="form-group text-center">
 
+                <button type="button" class="btn btn-primary btn-sm" ng-click="login()">
+                    <span class="glyphicon glyphicon glyphicon-log-in"/> Login
+                </button>
 
-            <a ng-click="login()" class="button">Login</a>
+            </div>
 
         </form>
 

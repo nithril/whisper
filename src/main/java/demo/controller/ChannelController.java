@@ -1,11 +1,15 @@
 package demo.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import demo.domain.Channel;
 import demo.domain.User;
+import demo.domain.view.Views;
 import demo.service.ChannelsManager;
 import demo.service.UsersManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
@@ -24,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.ImmutableMap.builder;
@@ -35,6 +40,9 @@ import static org.springframework.web.socket.server.support.HttpSessionHandshake
  */
 @Controller
 public class ChannelController {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ChannelController.class);
+
     @Autowired
     private SimpMessagingTemplate template;
 
@@ -57,8 +65,15 @@ public class ChannelController {
         return "index";
     }
 
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/ui/channels" , method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity getAllVisibleChannel(){
+        return ResponseEntity.ok(channelsManager.findAllVisibleChannel());
+    }
 
-    @RequestMapping(value = "/ui/channel", method = RequestMethod.POST, produces = "application/json")
+
+    @JsonView(Views.Public.class)
+    @RequestMapping(value = "/ui/channels", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity joinChannel(@RequestBody Map body, HttpSession httpSession) {
 
         String name = (String) body.get("name");
@@ -72,11 +87,15 @@ public class ChannelController {
 
             channel.getUsers().add(user);
 
+            //Notify channel user
             channel.getUsers().forEach(u -> {
                 try {
-                    this.messagingTemplate.convertAndSend("/queue/" + u.getPrivateId() + "/channel", objectMapper.writeValueAsString(channel));
+                    String json = objectMapper.writerWithView(Views.Public.class).writeValueAsString(channel);
+
+                    this.messagingTemplate.convertAndSend("/queue/" + u.getPrivateId() + "/channel",
+                           json);
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    LOG.error(e.getMessage() , e);
                 }
             });
 
@@ -117,7 +136,7 @@ public class ChannelController {
                             .put("channel", channel)
                             .put("author", sender.getName())
                             .put("message", map.get("message"))
-                            .put("date", ZonedDateTime.now().format(DateTimeFormatter.ISO_TIME).toString()).build();
+                            .put("date", System.currentTimeMillis()).build();
 
                     usersManager.findUserByPublicId((String) map.get("toPublicId")).ifPresent(u -> {
                         try {

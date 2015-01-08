@@ -48,6 +48,12 @@ public class UsersManager {
         return users.stream().filter(u -> sessionId.equals(u.getSessionId())).findFirst();
     }
 
+
+    public Optional<User> findUserByName(String name){
+        return users.stream().filter(u -> name.equals(u.getName())).findFirst();
+    }
+
+
     public void removeUserBySessionId(String sessionId) {
         users = users.stream().filter(u -> !sessionId.equals(u.getSessionId())).collect(Collectors.toList());
     }

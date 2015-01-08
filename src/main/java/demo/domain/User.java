@@ -1,16 +1,26 @@
 package demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import demo.domain.view.Views;
+
 /**
  * Created by nlabrot on 12/12/14.
  */
 public class User {
 
+    @JsonView(value = Views.Public.class)
     private String publicId;
+
+    @JsonView(value = Views.Internal.class)
     private String privateId;
 
+    @JsonView(value = Views.Internal.class)
     private String sessionId;
 
+    @JsonView(value = Views.Public.class)
     private String publicKey;
+
+    @JsonView(value = Views.Public.class)
     private String name;
 
     public String getPublicKey() {

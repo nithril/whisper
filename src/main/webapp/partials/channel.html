@@ -1,28 +1,36 @@
-<div class="row" ng-controller="ChannelCtrl">
+<div class="row" ng-controller="ChannelCtrl" style="height:100%;position:relative">
 
-    <div class="col-md-3">
-        <ul>
-            <li ng-repeat="user in channel.users track by $index">
-                {{user.name}}
-            </li>
-        </ul>
+    <div ui-layout="{ flow : 'column' }">
+        <div class="col-md-10" ui-layout-container  size="90%" min-size="100px" style="overflow: auto;margin-bottom:50px" scroll-glue>
+            <ul class="list-unstyled">
+                <li ng-repeat="message in messages track by $index">
+                    <div style="display: inline-block;margin-left: 5px">[{{message.date | date : 'HH:mm:ss'}}]</div>
+                    <div style="display: inline-block; font-weight: bold">&lt;{{message.author}}&gt;</div>
+                    <div style="display: inline">{{message.message}}</div>
+                </li>
+            </ul>
+
+            <div style="position: fixed; bottom: 0px">
+                <form class="form-inline">
+                    <div class="form-group" style="width: 100%">
+                <textarea class="form-control" id="name" placeholder="Message"
+                          ng-model="newMessage" enter-submit="send()"
+                          style="width: 90%;" rows="2"></textarea>
+                        <button type="button" class="btn btn-primary btn-sm" ng-click="send()">
+                            <span class="glyphicon glyphicon-ok"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-2" ui-layout-container size="10%" min-size="100px">
+            <ul class="list-unstyled">
+                <li ng-repeat="user in channel.users track by $index">
+                    <span class="glyphicon glyphicon-user"/>
+                    <strong>{{user.name}}</strong>
+                </li>
+            </ul>
+        </div>
     </div>
-
-    <div class="col-md-9">
-        <title>{{channel.name}}</title>
-        <span>{{channel}}</span>
-
-        <input type="text" ng-model="newMessage">
-        <a ng-click="send()">send</a>
-        {{newMessage}}
-
-        <ul>
-            <li ng-repeat="message in messages track by $index">
-                {{message.date}} {{message.author}} {{message.message}}
-
-            </li>
-
-        </ul>
-    </div>
-
 </div>

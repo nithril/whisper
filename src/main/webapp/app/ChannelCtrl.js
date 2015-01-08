@@ -2,7 +2,7 @@
 /* Controllers */
 
 
-phonecatApp.controller('ChannelCtrl', function ($rootScope, $scope, $http, $location, userService) {
+whisperApp.controller('ChannelCtrl', function ($rootScope, $scope, $http, $location, userService, stompService) {
 
     $scope.messages = [];
     $scope.user = userService.user;
@@ -29,11 +29,14 @@ phonecatApp.controller('ChannelCtrl', function ($rootScope, $scope, $http, $loca
     $scope.send = function () {
 
         _.forEach($scope.channel.users , function(user){
-            stompClient.send('/app/queue/channel/' + $scope.channel.privateId, {}, JSON.stringify({
-                message: cryptico.encrypt($scope.newMessage, user.publicKey).cipher,
+            stompService.stompClient.send('/app/queue/channel/' + $scope.channel.privateId, {}, JSON.stringify({
+                message: $scope.user.key.publicKey.encrypt($scope.newMessage),
                 toPublicId: user.publicId
             }));
         });
+
+        $scope.newMessage = "";
+
 
     };
 
